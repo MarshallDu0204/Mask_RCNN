@@ -13,5 +13,5 @@ Roi-pooling to Roi align
 2)
 FCN mask的输出以及loss问题
 
-FCN网络会对每一个ROI POOL的结果输出K个mask，分别对应对K类的二分类分割(对于错误类的分割都应是全0输出)
+FCN网络会对每一个ROI POOL的结果输出K个mask，分别对应对K类的二分类分割(对于不同于cls layer的结果(错误分类)的分割都应是全0输出)
 最后mask输出的结果取决于cls layer的判断(判断输出哪个mask)，从而避免了FCN分类与cls layer分类的冲突
