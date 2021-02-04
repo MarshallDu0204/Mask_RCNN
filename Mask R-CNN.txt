@@ -8,10 +8,20 @@ Roi-pooling to Roi align
 3.针对每一个点，距离它最近的4个真实像素点的值加权(双线性插值)，求得这个点的值
 4.一个bin内会算出4个新值，在这些新值中取max，作为这个bin的输出值 最后就能得到目标大小的输出
 
-
-
 2)
+网络结构
+FPN为骨干网络效果更好，网络结构：
+ROI输入被分为两个分支(实际为ROI pooling layer产生两个输出，输出分别为7*7*256 以及14*14*256)：
+ROI(1) --> Fully Connect -->Fully Connect --> cls + regr
+ROI(2) --> FCN --> 28*28*80(mask)
+
+
+3)
 FCN mask的输出以及loss问题
+
+传统的FCN网络产生一个w * h * class_num的输出， class_num为softmax形式 会与分类网络分支产生冲突
+在Mask R-CNN 中产生的是w * h * class_num class_num为sigmoid形式，分别对每一类进行segmentation
+实际意义是产生num_class个 w * h * 1(result) 的输出  result为sigmoid形式，分别代表对与不同类的分割结果
 
 FCN网络会对每一个ROI POOL的结果输出K个mask，分别对应对K类的二分类分割(对于不同于cls layer的结果(错误分类)的分割都应是全0输出)
 最后mask输出的结果取决于cls layer的判断(判断输出哪个mask)，从而避免了FCN分类与cls layer分类的冲突
